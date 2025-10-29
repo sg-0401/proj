@@ -1,0 +1,43 @@
+exp7 selenium
+
+Step 1: Selenium IDE Installation
+
+Open Mozilla Firefox.
+
+Go to: Selenium IDE Add-on
+
+Click Add to Firefox → Add.
+
+Restart Firefox.
+
+Click the Selenium IDE icon (top right) → Launch it.
+
+Click Create a New Project → Name it "selenium_demo" → Click OK.
+
+Step 2: Create a Test Case
+
+Click Start Recording.
+
+In Firefox, open: www.google.com
+
+Type "Selenium DevOps Tutorials" → Press Enter.
+
+Click the link: "How to Use DevOps in Selenium Testing" → Opens tutorial page.
+
+Check Test Editor box in IDE for recorded interactions.
+
+Click Stop Recording.
+
+Rename the test case: "javaTpoint_test".
+
+Step 3: Playing Back the Test
+
+Click Run Current Test → Executes all recorded steps.
+
+Log Pane shows summary of executed steps.
+
+Step 4: Saving the Test Suite
+
+Click Save → Save as "SelDevOpsdemo.side".
+
+The file is saved in .side format (Selenium IDE format).

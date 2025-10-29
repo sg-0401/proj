@@ -1,0 +1,112 @@
+exp2
+Step 1: Install Git
+
+For Ubuntu:
+
+sudo apt update
+sudo apt install git
+git --version
+
+su root
+
+Step 2: Configure Git
+
+Set username and email (used in commits):
+
+git config --global user.name "sujataoak799"
+git config --global user.email "sujataoak2021@gmail.com"
+git config --list
+
+Step 3: Integrate with GitHub
+
+Go to https://github.com
+
+Sign in and create a new repository
+
+Copy the repository link (HTTPS or SSH)
+
+Step 4: Create a Local Repository
+mkdir workspace
+cd workspace
+git init
+
+cd hello_test/
+
+Create a Python file hello.py
+touch hello.py
+ls
+gedit hello.py
+
+
+
+
+# factorial of given number
+def factorial(n):
+    if n < 0:
+        return 0
+    elif n == 0 or n == 1:
+        return 1
+    else:
+        fact = 1
+        while n > 1:
+            fact *= n
+            n -= 1
+        return fact
+
+# Driver Code
+num = 5
+print("Factorial of", num, "is", factorial(num))
+
+Step 5: Stage and Commit File
+
+Check untracked files:
+
+git status
+
+
+Add file to staging:
+
+git add hello.py
+
+
+Commit the file:
+
+git commit -m "First Python File"
+
+Step 6: Push to GitHub
+
+Push to remote repository:
+
+git push origin main
+
+
+If password authentication fails:
+
+Go to GitHub → Settings → Developer Settings → Personal Access Tokens → Tokens (Classic)
+
+Generate a new token and copy it.
+
+Update Git remote URL:
+
+git remote set-url origin https://<token>@github.com/<username>/<repo_name>
+
+
+Push again:
+
+git push origin main
+
+
+Check on GitHub — file hello.py will appear in the repository.
+
+Step 7: View Logs
+git log
+git log --oneline
+
+Step 8: Show Repository Details
+git show
+
+Step 9: View Differences Between Commits
+git diff
+
+Step 10: Revert to Previous Commit
+git revert <commitID> 

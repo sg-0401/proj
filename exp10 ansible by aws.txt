@@ -1,0 +1,105 @@
+exp10 ansible by aws
+
+cd Desktop
+cd 32_aarvi
+
+Step 1: Launch AWS Instances
+
+Launch two AWS EC2 instances:
+
+One as Ansible Master
+
+One as Ansible Slave
+
+Use a Linux AMI (Ubuntu recommended).
+
+Step 2: Connect to Instances
+
+Connect via SSH:
+Ansible Master:
+
+ssh -i <your-key.pem> ubuntu@<master-public-ip>
+
+
+Ansible Slave:
+
+ssh -i <your-key.pem> ubuntu@<slave-public-ip>
+ 
+sudo su
+
+Step 3: Ping Master and Slave
+
+From Master, test connection to Slave:
+
+ping <slave-private-ip>
+
+
+From Slave, test connection to Master:
+
+ping <master-private-ip>
+
+
+
+
+
+
+On Ansible Master (Ubuntu Instance)
+# Step 1: Update system
+sudo apt update -y
+
+# Step 2: Add Ansible repository
+sudo apt-add-repository ppa:ansible/ansible -y
+sudo apt update -y
+
+# Step 3: Install Ansible
+sudo apt-get install ansible -y
+
+# Step 4: Check Ansible version
+ansible --version
+
+# Step 5: Configure hosts file
+sudo bash -c 'echo "[client_1]" >> /etc/ansible/hosts'
+sudo bash -c 'echo "<slave-private-ip>" >> /etc/ansible/hosts'
+
+# Step 6: Generate SSH key
+ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
+
+# Step 7: Display public key to copy
+cat ~/.ssh/id_rsa.pub
+
+On Ansible Slave (Ubuntu Instance)
+# Step 1: Update system
+sudo apt update -y
+
+# Step 2: Add Master's public key to authorized_keys
+mkdir -p ~/.ssh
+nano ~/.ssh/authorized_keys
+# Paste the public key from Master here, save and exit
+
+# Step 3: Restart SSH service
+sudo systemctl restart ssh
+
+Back on Master
+# Step 8: Test connectivity
+ansible -m ping all
+
+# Step 9: Gather system facts
+ansible client_1 -m setup
+
+# Step 10: Install git on slave
+ansible client_1 -m apt -a "name=git state=present" --become
+
+# Step 11: Verify git installation on slave
+ssh ubuntu@<slave-private-ip> "git --version"
+
+# Step 12: Uninstall nano package on slave
+ansible client_1 -m apt -a "name=nano state=absent" --become
+
+# Step 13: Verify nano is removed
+ssh ubuntu@<slave-private-ip> "nano test.txt"
+
+# Step 14: Reinstall nano package on slave
+ansible client_1 -m apt -a "name=nano state=present" --become
+
+# Step 15: Verify nano is installed
+ssh ubuntu@<slave-private-ip> "nano test.txt"

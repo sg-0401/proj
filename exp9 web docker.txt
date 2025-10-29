@@ -1,0 +1,105 @@
+exp9 web docker
+
+PART I: Containerize an Application Using Docker CLI
+
+Step 1: Check existing images
+
+docker images
+
+
+Step 2: Pull official nginx image
+
+docker pull nginx
+
+
+Step 3: Run a container from nginx image
+
+docker run --name webserver1 -d nginx
+
+
+Step 4: Check running containers
+
+docker ps -a
+
+
+Step 5: Run container interactively with port mapping
+
+docker run -it -p 3031:80 --name server1 nginx:latest bash
+
+
+Step 6: Navigate to nginx web directory inside container
+
+cd /usr/share/nginx/html/
+ls
+
+
+Step 7: Backup default index.html
+
+mv index.html index.html_backup
+
+
+Step 8: Install nano editor (if not available)
+
+apt update
+apt install nano -y
+
+
+Step 9: Create your custom index.html
+
+nano index.html
+
+
+(Paste your HTML code for the student login page and save.)
+
+Step 10: Start nginx service inside container
+
+service nginx start
+
+
+Step 11: Pause and unpause container
+
+docker pause <container_id>
+docker unpause <container_id>
+
+
+Step 12: Stop and remove container
+
+docker stop <container_id>
+docker rm <container_id>
+
+PART II: Dockerfile – Build Your Own Image
+
+Step 1: Create a Dockerfile
+
+nano Dockerfile
+
+
+(Add instructions like FROM nginx, COPY index.html /usr/share/nginx/html/, etc.)
+
+Step 2: Build Docker image
+
+docker build -t sujatadocker2024/websitetest .
+
+
+Step 3: Run container from your image
+
+docker run -it -p 3032:80 sujatadocker2024/websitetest
+
+sudo su
+docker rm 384
+
+Step 4: Access application in browser
+
+Open: http://localhost:3032
+
+
+Step 5: Push Docker image to Docker Hub
+
+Tag image:
+
+docker tag sujatadocker2024/websitetest <dockerhub_username>/websitetest:latest
+
+
+Push image:
+
+docker push <dockerhub_username>/websitetest:latest

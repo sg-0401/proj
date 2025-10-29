@@ -1,0 +1,83 @@
+exp11 ansible lamp stack
+
+STEP 1: Setup Directory and Clone Repository  ------------master
+
+Open terminal on Ansible-master machine (Ubuntu PC).
+
+Navigate to home directory:
+
+cd ~
+
+
+Create a folder for the lab:
+
+mkdir ansible-lab
+cd ansible-lab/
+
+
+Clone your GitHub repository containing Ansible playbooks and files:
+
+git clone https://github.com/sujataoak799/ansiblecodes.git
+
+
+Navigate into the cloned folder:
+
+cd ansible-codes/
+
+
+List the files to confirm:
+
+ls
+
+
+You should see files like lampstack_1.yml, deploywebsite.yml, index.html, mysqlmodule.yml, etc.
+
+
+
+
+STEP 2: Configure Ansible-Slave
+
+Ensure your slave machine is connected via SSH from the master.
+
+Open the playbook you want to run on the slave:
+
+nano lampstack_1.yml
+
+
+Make any required changes and save the file.
+
+
+
+STEP 3: Execute the Playbook-------------------master
+
+Run the LAMP stack playbook on the slave machine:
+
+ansible-playbook lampstack_1.yml
+
+
+This will automatically install:
+
+Apache (web server)
+
+MySQL (database server)
+
+PHP (programming language)
+
+Verify on Ansible-slave:
+
+mysql          # Check MySQL command works
+php --version  # Check PHP version
+service apache2 status  # Check Apache service status
+
+
+
+STEP 4: Verify Deployment---------------------------------slave
+
+Copy the IPv4 address of the Ansible-slave machine.
+
+Open a browser and enter the address:
+
+http://<ansible-slave-ip>/
+
+
+You should see the index.html page deployed by the playbook.

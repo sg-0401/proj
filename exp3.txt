@@ -1,0 +1,115 @@
+exp3
+
+su root
+cd workspace
+ls
+hello_test
+cd hello_test/
+
+Step 1: Create a New Branch
+
+Create a branch named feature:
+
+git branch feature
+
+
+
+Step 2: Verify Current Branch
+
+List all branches:
+
+git branch
+
+
+⭐ The * symbol shows the currently active branch (e.g., * main).
+
+Step 3: Checkout the New Branch
+
+Switch to the feature branch:
+
+git checkout feature
+
+
+Step 4: Verify Current Branch
+
+Check active branch:
+
+git branch
+
+
+Now * feature will be active.
+
+Modify the file:
+
+echo " This is a new feature" >> hello.py
+
+
+View changes:
+
+cat hello.py
+
+
+
+Step 5: Stage the Modified File
+git status
+git add hello.py
+git status
+
+Step 6: Commit the Changes
+git commit -m "Added a new feature line to hello.py"
+git log
+
+
+This saves the new changes in the feature branch.
+
+
+Step 7: 
+Checkout Main Branch # command
+
+Switch back to main branch:
+
+git checkout main
+git branch
+
+
+Step 8: Merge the Feature Branch into Main
+
+Merge changes:
+
+git merge feature
+
+
+This brings all updates from feature into main.
+Verify changes:
+
+cat hello.py
+
+
+
+Step 9: Push Changes to Remote Repository
+
+Generate a Personal Access Token (Classic) on GitHub if not already done, then push:
+
+git push -u origin main
+
+git remote set-url origin https://......
+
+Check your GitHub repository — the updates will appear there.
+
+
+
+Step 10: Delete the Feature Branch
+
+View all branches:
+
+git branch
+
+
+Delete the branch:
+
+git branch -d feature
+
+
+Verify deletion:
+
+git branch

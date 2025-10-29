@@ -1,0 +1,141 @@
+exp5 pipeline
+
+Phase 1 — Jenkins Configuration
+
+Step 1:
+Find your Java installation path:
+
+find / -type f -name java
+
+
+Copy the path (e.g. /usr/lib/jvm/java-11-openjdk-amd64/bin/java).
+
+Step 2:
+Open Jenkins → Manage Jenkins → Global Tool Configuration.
+
+Step 3:
+
+Uncheck “Install automatically” under JDK.
+
+Paste your Java path.
+
+For Git → check “Install automatically”.
+
+For Maven → check the box and give a name.
+
+Save all.
+
+Phase 2 — Create CI Pipeline
+
+Step 4:
+Click “New Item” → Freestyle Project → give name → OK.
+
+Step 5:
+Under Source Code Management, select Git,
+Paste repository URL:
+
+https://github.com/sujataoak799/hello-world2025.git
+
+
+Select your branch and Save.
+
+Step 6:
+Click Build Now — Jenkins pulls the code.
+
+Step 7:
+Go to Configure → Build → Add build step → Invoke top-level Maven targets.
+Select your Maven name and type goals:
+
+clean install
+
+
+(or package test depending on the repo).
+Save → Build Now → Maven builds and generates .war file.
+
+Step 8:
+To verify .war file:
+
+cd /var/lib/jenkins/workspace/
+ls
+
+
+Step 9:
+Go to Post-build Actions → Archive the Artifacts → “/*.war”** → Save → Build again.
+Now artifact appears on Jenkins dashboard.
+
+Phase 3 — Tomcat Setup (Continuous Deployment)
+
+Step 10:
+Install Tomcat 9:
+
+sudo groupadd tomcat
+sudo useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
+cd /tmp
+curl -O https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.109/bin/apache-tomcat-9.0.109.tar.gz
+sudo mkdir /opt/tomcat
+sudo tar xzvf apache-tomcat-9.0.109.tar.gz -C /opt/tomcat --strip-components=1
+cd /opt/tomcat
+sudo chgrp -R tomcat /opt/tomcat
+sudo chmod -R g+r conf
+sudo chmod g+x conf
+sudo chown -R root:root tomcat/
+
+
+Step 11:
+Change Tomcat port from 8080 → 8090:
+
+cd /opt/tomcat/conf
+vi server.xml
+
+
+Step 12:
+Edit tomcat-users.xml:
+Add:
+
+<role rolename="manager-gui"/>
+<role rolename="manager-script"/>
+<user username="admin" password="admin" roles="manager-gui,manager-script"/>
+
+
+Step 13:
+Edit context.xml to remove IP restrictions:
+
+cd /opt/tomcat/webapps/manager/META-INF
+vi context.xml
+
+
+Delete everything inside <Context> tags and save.
+
+Step 14:
+Restart Tomcat:
+
+cd /opt/tomcat/bin
+./shutdown.sh
+./startup.sh
+
+Phase 4 — Jenkins Deployment Configuration
+
+Step 15:
+In Jenkins:
+→ Manage Jenkins → Manage Plugins → Available
+Search for Deploy to Container → Install.
+
+Step 16:
+Go to Configure → Post-build Actions → Add “Deploy war/ear to a container”.
+
+WAR path: **/*.war
+
+Add container: Tomcat 9.x Remote
+
+URL: http://<your_ip>:8090
+
+Add credentials → username admin, password admin.
+Save and Build again.
+
+Step 17:
+After successful build → visit:
+
+http://localhost:8090/webapp/
+
+
+✅ Your application is deployed successfully

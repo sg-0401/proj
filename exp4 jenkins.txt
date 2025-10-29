@@ -1,0 +1,147 @@
+exp4 jenkins
+
+sudo su
+
+1. Update package lists
+sudo apt-get update
+
+2. Install Java (JDK 11)
+sudo apt-get install -y openjdk-11-jdk
+java -version    # verify installation
+
+3. Add Jenkins repository and install Jenkins
+
+curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io.key \
+  | sudo tee /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian-stable binary/ \
+  | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+
+sudo apt-get update
+sudo apt-get install -y jenkins
+sudo systemtl start jenkins.service
+
+
+4. Start and check Jenkins service
+sudo systemctl start jenkins
+sudo systemctl status jenkins   # should show active (running)
+
+5. Open firewall port 8080 (if ufw is used)
+
+sudo ufw status
+sudo ufw allow 8080
+sudo ufw enable   # only if ufw wasn't enabled already
+sudo ufw status
+
+
+
+
+6. Open Jenkins in browser and unlock
+
+In browser go to: http://localhost:8080 (or http://<server-ip>:8080)
+
+Get initial admin password:
+
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+
+
+Paste password in setup wizard.
+
+7. Install suggested plugins and create admin user
+
+Choose Install suggested plugins.
+
+When finished, create the admin username/password and continue.
+
+Set the Jenkins URL if prompted and finish.
+
+Create & push your Java HelloWorld to GitHub (so Jenkins can build it)
+
+On your local machine (where your code lives):
+
+8. Create a simple Java file
+
+Create Simple.java (or HelloWorld.java) in a folder:
+
+// Simple.java
+public class Simple {
+  public static void main(String[] args) {
+    System.out.println("Hello from Jenkins!");
+  }
+}
+
+9. Initialize local git repo and push to GitHub
+cd /path/to/your/project
+git init
+git add .
+git commit -m "Add Simple.java"
+# create repo on GitHub (via website) and copy HTTPS repo URL
+git remote add origin https://github.com/<your-user>/<repo>.git
+git push -u origin main   # or master depending on your branch
+
+
+If GitHub rejects password auth, create a Personal Access Token (PAT) in your GitHub account and use it as the password when pushing or include it in remote URL (recommended: use credential helper).
+
+Create Jenkins job to build and run the Java program
+10. In Jenkins: New Item → Freestyle project
+
+Dashboard → New Item
+
+Enter name (e.g., HelloWorld)
+
+Select Freestyle project → OK
+
+11. Configure job — Source Code Management
+
+Under Source Code Management select Git
+
+Paste your repository URL: https://github.com/<your-user>/<repo>.git
+
+If private, provide credentials (username + PAT) via Add → Username with password (use PAT as password).
+
+12. Configure Build step
+
+In Build section → Add build step → Execute shell
+
+Enter commands to compile and run:
+
+javac Simple.java
+java Simple
+
+
+(Adjust filenames if you used a different name.)
+
+
+
+13. Save the job
+
+Click Apply → Save
+
+14. Run the job
+
+On job page click Build Now
+
+Build appears in Build History
+
+15. Check console output
+
+Click the build number (e.g., #1) → Console Output
+
+You should see compile messages and Hello from Jenkins! printed (and a success status).
+
+Useful commands & checks
+
+Restart Jenkins:
+
+sudo systemctl restart jenkins
+
+
+Stop Jenkins:
+
+sudo systemctl stop jenkins
+
+
+Check logs:
+
+sudo journalctl -u jenkins -f

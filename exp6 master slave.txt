@@ -1,0 +1,96 @@
+exp6 master slave
+
+Step 1:
+
+Open Jenkins Dashboard →
+Go to Manage Jenkins → Manage Nodes and Clouds → New Node.
+
+Step 2:
+
+Enter a Node Name (e.g., agent2) →
+Select Permanent Agent → Click OK.
+
+Step 3:
+
+on terminal
+pwd
+su root
+
+
+Configure the new agent with the following details:
+
+# of Executors: 1 or more (how many jobs can run in parallel).
+
+Remote root directory: Path where Jenkins stores job files (e.g., /home/ubuntu/jenkins).
+
+Labels: agent2 (for targeting jobs).
+
+Usage: “Only build jobs with label expressions matching this node.”
+
+Under Node Properties, provide JDK path (e.g., /usr/lib/jvm/java-11-openjdk-amd64).
+
+Click Save.
+
+Step 4:
+
+You’ll get an error saying the agent is not yet connected.
+Now configure JNLP Port in Jenkins:
+
+Go to:
+👉 Manage Jenkins → Configure Global Security
+Enable TCP Port for inbound agents → Set it to Fixed: 50000
+
+Now allow that port on the system (firewall):
+
+sudo ufw allow 50000/tcp
+
+
+This opens port 50000 for agent communication.
+
+Step 5:
+
+Go to Manage Jenkins → Nodes → agent2
+You will see two connection options.
+
+Use the second option (for JNLP connection).
+Run the command shown on the page in the slave machine’s terminal, for example:
+
+curl -s0 https://127.0.0.1:8080/jnlpJars/agent.jar
+
+
+
+java -jar agent.jar -jnlpUrl http://<master-ip>:8080/computer/agent2/slave-agent.jnlp -secret <secret-key> -workDir "/home/ubuntu/jenkins"
+
+
+✅ Output: “Connected” — The slave node successfully connects to the master.
+
+Now Jenkins shows the agent as online.
+
+Step 6:
+
+Create a New Job in Jenkins Dashboard.
+
+Click New Item → Freestyle Project
+
+Under General, check Restrict where this project can be run
+
+In the Label Expression, enter:
+
+agent2
+
+
+Add build steps (e.g., Execute shell) → Save.
+
+Step 7:
+
+Click Build Now.
+In the Console Output, you will see:
+
+Building remotely on agent2 (agent2)
+
+
+✅ This confirms the build is executed on the slave node.
+
+Step 8:
+
+Go to Manage Jenkins → Nodes → agent2, and verify its status = Online and build success logs.

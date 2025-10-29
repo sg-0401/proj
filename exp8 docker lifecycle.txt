@@ -1,0 +1,46 @@
+exp8 docker lifecycle
+
+
+Step1:sudo su
+Step2:sudo sh get-docker.sh
+Step3:docker --version
+Step4:docker version
+Step5:docker login
+you will get a link on terminal click on that link 
+then it will ask for a code.which also present in terminal 
+login with your email 
+done 
+Step5:docker run hello-world
+Step6:docker run -it ubuntu bash
+Step7:docker images #we can see the images that we pull from docker hub
+Step8: docker pull mysql
+Step9:docker ps #this command will show which container is running
+Step10:docker ps -a #command will show which container is running and exited
+Step11:docker exec -it <container id> bash
+Step12: docker rm <container name/container id>
+exp: docker rm hello-world
+Step13:docker rmi <image name/image id>
+exp : docker rmi hello-world
+Step14:backup
+docker start <container-id> : Start the stop container
+docker stop <container-id> : Stop the running container
+docker pause <container-id> : Pause the processes in running container
+docker kill <container id> : Kill the container.
+
+
+
+
+
+if professor tell to pull mysql then execute this otherwise dont do this
+docker pull mysql 
+$ docker run --name test-mysql MYSQL_ROOT_PASSWORD=strong_password -d mysql
+in another terminal
+docker exec -it mysql
+after that
+
+mysql -u root -p
+password is strong_password
+then execute 2-3 mysql commands
+show databases;
+show table;
+use <database name>
